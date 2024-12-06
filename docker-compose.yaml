@@ -11,6 +11,3 @@ services:
       WORDPRESS_DB_PASSWORD: your/pw/db
     volumes:
       - your/path/volume/efs
-
-
-EBAAAAAAAAAAAAAAAAAA
