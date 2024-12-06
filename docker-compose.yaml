@@ -1,0 +1,15 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: endpoint/rds/:3306
+      WORDPRESS_DB_NAME: your/name/db
+      WORDPRESS_DB_USER: your/user/db
+      WORDPRESS_DB_PASSWORD: your/pw/db
+    volumes:
+      - your/path/volume/efs
+
+
