@@ -5,7 +5,7 @@
 ### A proposta desse projeto é de subir instâncias EC2 privadas na AWS com um container utilizando a imagem do Wordpress. Para isso deve-se atender a algumas requisições, como conectar ao serviço RDS da Amazon, utilização do EFS para os arquivos estáticos, criação e configuração da VPC alocando as instâncias e os serviços nas redes privadas/seguras, criação de um Load Balancer para a conexão externa das instâncias privadas, e por último o Auto Scalling Group, com o objetivo de concluir esse sistema de forma segura e escalável.
 
 <p align="center">
-  <img src="imagens/proposta.png" alt="Proposta" />
+  <img src="imagens/proposta.PNG" alt="Proposta" />
 </p>
 
 
@@ -169,7 +169,7 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
             - Adicione as suas subnets privadas as suas explicit subnet associations
 
 <p align="center">
-  <img src="imagens/vpc.png" alt="VPC" />
+  <img src="imagens/VPC.PNG" alt="VPC" />
 </p>
 
 
@@ -292,14 +292,7 @@ Para isso vamos utilizar inicialmente o template, para nos auxiliar na criação
     sudo apt-get install -y nfs-common
     sudo mount -t nfs4 -o rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport (EFS-DNS-name):/ /efs
     ```
-    Agora parte para a última etapa do user data, de criar o arquivo docker compose e determinar suas configurações.
-
-    <p align="center">
-      <img src="imagens/docker-compose.png" alt="Docker-compose" />
-    </p>
-
-
-    O docker compose determina as configurações para o container que você vai subir, para isso, o Wordpress necessita alocar o volume em algum lugar, nesse projeto foi-se necessário o EFS, em conjunto com o banco de dados do RDS. As ports garantem que tráfego será lido e dessa forma criada a imagem. As variáveis do ambiente são configuradas a partir das informações mostradas na criação do RDS.
+    Agora parte para a última etapa do user data, precisamos criar o arquivo docker compose e determinar suas configurações para o container que você vai subir, para isso, o Wordpress necessita alocar o volume em algum lugar, que no caso será o EFS, em conjunto com o banco de dados do RDS. As ports garantem que o tráfego será lido e dessa forma criada a imagem. As variáveis do ambiente são configuradas a partir das informações mostradas na criação do RDS.
 
 
     ```
@@ -447,7 +440,7 @@ Para a criação do ASG foi efetuado os seguintes passos:
 Com essa ferramenta as instâncias EC2 serão criadas automaticamente e estarão sendo colocadas como target instances pelo Load Balancer para a validação do health check.
 
 <p align="center">
-  <img src="imagens/diagrama.png" alt="Diagrama" />
+  <img src="imagens/diagrama.PNG" alt="Diagrama" />
 </p>
 
 ---
