@@ -1,10 +1,13 @@
-# Atividade AWS - Projeto para subir uma aplicação do Wordpress pelo Docker
+# Atividade AWS - Projeto para instalação do Wordpress pela EC2 na AWS Services
 
 ## Apresentação
 
 ### A proposta desse projeto é de subir instâncias EC2 privadas na AWS com um container utilizando a imagem do Wordpress. Para isso deve-se atender a algumas requisições, como conectar ao serviço RDS da Amazon, utilização do EFS para os arquivos estáticos, criação e configuração da VPC alocando as instâncias e os serviços nas redes privadas/seguras, criação de um Load Balancer para a conexão externa das instâncias privadas, e por último o Auto Scalling Group, com o objetivo de concluir esse sistema de forma segura e escalável.
 
-Imagem (proposta)
+<p align="center">
+  <img src="imagens/proposta.png" alt="Proposta" />
+</p>
+
 
 ---
 
@@ -61,6 +64,7 @@ Os grupos de segurança são extremamente importantes para garantir que a nossa 
 
 Para as outbound rules deixamos all traffic 0.0.0.0/0.
 
+---
 ### 2. VPC - Virtual Private Cloud
 
 A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como se fosse um *datacenter privado* na nuvem, e é nela onde vamos criar as nossas subredes privadas e públicas para alocar os nossos serviços da aplicação. Portanto para começar vamos criar ela do zero, conforme os seguintes passo a passo:
@@ -164,9 +168,12 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
         - Subnet associations
             - Adicione as suas subnets privadas as suas explicit subnet associations
 
-[imagem: VPC]
+<p align="center">
+  <img src="imagens/vpc.png" alt="VPC" />
+</p>
 
 
+---
 ### 3. EFS - Elastic File System
 
 O EFS é um serviço de sistema de arquivos escalável que permite que múltiplas instâncias EC2 acessem simultaneamente o mesmo sistema de arquivos compartilhado, nos auxiliando imensamente para a nossa aplicação, resguardando o nosso armazenamento.
@@ -182,6 +189,7 @@ O EFS criado possui a Availability Zone Regional, determinando que o sistema de 
         - Em Mount targets, selecionamos as availability zones disponíveis, portanto como criamos apenas a us-east-1a e us-east-1b, deixamos estas com as subnets privadas
         - Deixamos as duas zonas selecionadas com as subnets privadas com o seu respectivo security group EFS
 
+---
 ### 4. RDS - Relational Database 
 
 O RDS é um serviço da AWS que facilita a configuração, operação e escalabilidade de bancos de dados relacionais na nuvem. Ele automatiza tarefas administrativas, permitindo que o usuário se concentre no desenvolvimento e na otimização das suas aplicações. O Wordpress exige um banco de dados para funcionar, e o RDS nos proporciona um banco de dados do tipo MYSQL para esta tarefa.
@@ -212,7 +220,7 @@ O RDS é um serviço da AWS que facilita a configuração, operação e escalabi
         - **Initial database name:** Selecione o nome para o seu banco (muito importante)
     - Create database
 
-
+---
 ### 5. Instância EC2 e User Data
 
 A criação da EC2 é uma das etapas mais importantes, pois é aqui onde vamos configurar toda a parte da instância privada que vai subir o container do wordpress, para isso é necessário executar uma série de comandos que instalarão os pacotes necessários para que tudo funcione corretamente. 
@@ -286,7 +294,10 @@ Para isso vamos utilizar inicialmente o template, para nos auxiliar na criação
     ```
     Agora parte para a última etapa do user data, de criar o arquivo docker compose e determinar suas configurações.
 
-    [image: docker-compose]
+    <p align="center">
+      <img src="imagens/docker-compose.png" alt="Docker-compose" />
+    </p>
+
 
     O docker compose determina as configurações para o container que você vai subir, para isso, o Wordpress necessita alocar o volume em algum lugar, nesse projeto foi-se necessário o EFS, em conjunto com o banco de dados do RDS. As ports garantem que tráfego será lido e dessa forma criada a imagem. As variáveis do ambiente são configuradas a partir das informações mostradas na criação do RDS.
 
@@ -333,6 +344,7 @@ Para isso vamos utilizar inicialmente o template, para nos auxiliar na criação
  
 Para facilitar o processo de criação da EC2.
 
+---
 ### 6. Acesso ao EC2 e Bastion Host
 
 Caso queria acessar a instância privada pelo Ubuntu, foi estipulado o passo a passo para conexão da instância através do Bastion Host, que é uma instância de servidor especialmente configurada para atuar como ponto seguro de acesso. Para isso criamos o Bastion Host com as seguintes configurações:
@@ -381,7 +393,7 @@ e
 mysql -h (database_endpoint) -u admin -p
 ```
 
-
+---
 ### 7. Load Balancer
 
 O Load Balancer é um recurso que distribui automaticamente o tráfego de entrada de aplicações por várias instâncias, contêineres, etc. Ele melhora a escalabilidade, disponibilidade e resiliência de aplicações. O LB utiliza um recurso dele chamado health check, que avalia a saúda das instâncias ou destinos configurados e garante que o tráfego só seja direcionados para aqueles que estão funcionando corretamente, expondo essas instâncias saudáveis externamente à internet. Para a criação do Load Balancer, foi escolhido por questão de custos e operabilidade o Classic Load Balancer:
@@ -404,6 +416,7 @@ O Load Balancer é um recurso que distribui automaticamente o tráfego de entrad
         - Ping path: /your/path
     - Create Load Balancer
 
+---
 ### 8. ASG - Auto Scaling Group
 
 O ASG permite gerenciar automaticamente a escalabilidade de um conjunto de instâncias EC2. Ele ajusta o número de instâncias para atender à demanda da sua aplicação, garantindo alta disponibilidade e otimizando custos. Sendo assim, o Auto Scaling criará automaticamente nossas instâncias privadas quando necessário.
@@ -433,9 +446,12 @@ Para a criação do ASG foi efetuado os seguintes passos:
 
 Com essa ferramenta as instâncias EC2 serão criadas automaticamente e estarão sendo colocadas como target instances pelo Load Balancer para a validação do health check.
 
-[imagem: diagrama]
+<p align="center">
+  <img src="imagens/diagrama.png" alt="Diagrama" />
+</p>
 
-## Conclusão
+---
+### Conclusão
 
 Com esse projeto, foi possível entender os conceitos básicos da utilizações de instâncias EC2, e sua arquitetura para aplicações escaláveis e seguras, com métodos práticos e eficazes no qual me exigiu um esforço considerável para concluir. 
 
