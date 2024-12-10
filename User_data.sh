@@ -30,3 +30,43 @@ sudo usermod -aG docker ubuntu
 sudo apt install -y mysql-client-core-8.0
 
 docker pull wordpress
+
+# Criação do EFS
+sudo mkdir -p /efs
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install -y nfs-common
+sudo mount -t nfs4 -o rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport (EFS-DNS-name):/ /efs
+
+# Criar diretório onde o docker-compose.yaml será salvo
+sudo mkdir -p /home/ubuntu/myapp
+
+# Criar o arquivo docker-compose.yaml com o conteúdo necessário
+cat > /home/ubuntu/myapp/docker-compose.yaml <<EOL
+version: '3.8'
+
+services:
+wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+    - "80:80"
+    environment:
+        WORDPRESS_DB_HOST: rds/endpoint:3306
+        WORDPRESS_DB_NAME: your/database/name
+        WORDPRESS_DB_USER: your/database/user
+        WORDPRESS_DB_PASSWORD: your/database/password
+    volumes:
+        - /efs/efs_wordpress:/var/www/html
+
+
+EOL
+
+#Instala o Docker compose
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+# Iniciar o Docker Compose
+cd /home/ubuntu/myapp
+docker compose up -d

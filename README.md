@@ -311,12 +311,12 @@ Para isso vamos utilizar inicialmente o template, para nos auxiliar na criação
         ports:
         - "80:80"
         environment:
-        WORDPRESS_DB_HOST: rds/endpoint:3306
-        WORDPRESS_DB_NAME: your/database/name
-        WORDPRESS_DB_USER: your/database/user
-        WORDPRESS_DB_PASSWORD: your/database/password
+            WORDPRESS_DB_HOST: rds/endpoint:3306
+            WORDPRESS_DB_NAME: your/database/name
+            WORDPRESS_DB_USER: your/database/user
+            WORDPRESS_DB_PASSWORD: your/database/password
         volumes:
-        - /efs/efs_wordpress:/var/www/html
+            - /efs/efs_wordpress:/var/www/html
 
 
     EOL
