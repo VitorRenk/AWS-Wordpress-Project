@@ -11,8 +11,8 @@
 
 ---
 
-- [1- Security Groups](#1-security-groups)
-- [2- VPC - Virtual Private Cloud](#2-vpc---virtual-private-cloud)
+- [1- VPC - Virtual Private Cloud](#1-vpc---virtual-private-cloud)
+- [2- Security Groups](#2-security-groups)
 - [3- EFS - Elastic File System](#3-efs---elastic-file-system)
 - [4- RDS - Relational Database](#4-rds---relational-database)
 - [5- Instância EC2 e User Data](#5-instância-ec2-e-user-data)
@@ -22,50 +22,7 @@
 - [Conclusão](#conclusão)
 
 ---
-
-### 1. Security Groups
-
-Os grupos de segurança são extremamente importantes para garantir que a nossa aplicação do Wordpress seja efetuada com segurança, garantindo nossa integridade a um acesso seguro e confiável. Portanto é necessário alocar as ports corretas nas **Inbound rules**. Segue os Security Groups utilizados nesse projeto:
-
-### Inbound do Security Group EC2 privado
-
-|SERVIÇO         |MAPEAMENTO                |PORTA           |
-|----------------|--------------------------|----------------|
-|SSH             |10.0.0.x                  |22              |
-|HTTP            |SG-LoadBalancer           |80              |
-|Custom TCP      |SG-LoadBalancer           |8080            |
-|NFS             |SG-EFS                    |2049            |
-|MYSQL/AURORA    |SG-RDS                    |3306            |
-
-### Inbound do Security Group LoadBalancer
-
-|SERVIÇO         |MAPEAMENTO                |PORTA           |
-|----------------|--------------------------|----------------|
-|HTTP            |0.0.0.0/0                 |80              |
-|Custom TCP      |0.0.0.0/0                 |8080            |
-
-### Inbound do Security Group EFS
-
-|SERVIÇO         |MAPEAMENTO                |PORTA           |
-|----------------|--------------------------|----------------|
-|NFS             |SG-EC2                    |2049            |
-
-### Inbound do Security Group RDS
-
-|SERVIÇO         |MAPEAMENTO                |PORTA           |
-|----------------|--------------------------|----------------|
-|MYSQL/AURORA    |SG-EC2                    |3306            |
-
-### Inbound do Security Group Bastion Host
-
-|SERVIÇO         |MAPEAMENTO                |PORTA           |
-|----------------|--------------------------|----------------|
-|SSH             |0.0.0.0/0                 |22              |
-
-Para as outbound rules deixamos all traffic 0.0.0.0/0.
-
----
-### 2. VPC - Virtual Private Cloud
+### 1. VPC - Virtual Private Cloud
 
 A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como se fosse um *datacenter privado* na nuvem, e é nela onde vamos criar as nossas subredes privadas e públicas para alocar os nossos serviços da aplicação. Portanto para começar vamos criar ela do zero, conforme os seguintes passo a passo:
  - Vá até a aba da VPC
@@ -172,6 +129,48 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
   <img src="imagens/VPC.PNG" alt="VPC" />
 </p>
 
+---
+### 2. Security Groups
+
+Os grupos de segurança são extremamente importantes para garantir que a nossa aplicação do Wordpress seja efetuada com segurança, garantindo nossa integridade a um acesso seguro e confiável. Portanto é necessário alocar as ports corretas nas **Inbound rules**. Segue os Security Groups utilizados nesse projeto:
+
+### Inbound do Security Group EC2 privado
+
+|SERVIÇO         |MAPEAMENTO                |PORTA           |
+|----------------|--------------------------|----------------|
+|SSH             |10.0.0.x                  |22              |
+|HTTP            |SG-LoadBalancer           |80              |
+|Custom TCP      |SG-LoadBalancer           |8080            |
+|NFS             |SG-EFS                    |2049            |
+|MYSQL/AURORA    |SG-RDS                    |3306            |
+
+### Inbound do Security Group LoadBalancer
+
+|SERVIÇO         |MAPEAMENTO                |PORTA           |
+|----------------|--------------------------|----------------|
+|HTTP            |0.0.0.0/0                 |80              |
+|Custom TCP      |0.0.0.0/0                 |8080            |
+
+### Inbound do Security Group EFS
+
+|SERVIÇO         |MAPEAMENTO                |PORTA           |
+|----------------|--------------------------|----------------|
+|NFS             |SG-EC2                    |2049            |
+
+### Inbound do Security Group RDS
+
+|SERVIÇO         |MAPEAMENTO                |PORTA           |
+|----------------|--------------------------|----------------|
+|MYSQL/AURORA    |SG-EC2                    |3306            |
+
+### Inbound do Security Group Bastion Host
+
+|SERVIÇO         |MAPEAMENTO                |PORTA           |
+|----------------|--------------------------|----------------|
+|SSH             |0.0.0.0/0                 |22              |
+
+Para as outbound rules deixamos all traffic 0.0.0.0/0.
+
 
 ---
 ### 3. EFS - Elastic File System
@@ -186,7 +185,7 @@ O EFS criado possui a Availability Zone Regional, determinando que o sistema de 
 - Network
     - Manage
         - Adicionar a sua VPC
-        - Em Mount targets, selecionamos as availability zones disponíveis, portanto como criamos apenas a us-east-1a e us-east-1b, deixamos estas com as subnets privadas
+        - Em Mount targets, selecionamos as availability zones disponíveis, portanto como criamos apenas a us-east-1a e us-east-1b, deixamos estas com as subnets públicas
         - Deixamos as duas zonas selecionadas com as subnets privadas com o seu respectivo security group EFS
 
 ---
