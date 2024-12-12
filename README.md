@@ -44,7 +44,7 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
         - Subnet 1:
             - Subnet name: Pública-1
             - Availability Zone us-east-1a
-            - Subnet CIDR block: 10.0.0.x
+            - Subnet CIDR block: 10.0.0.0/24
             - Tags:
                 |KEY      |VALUE                |
                 |---------|---------------------|
@@ -52,7 +52,7 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
         - Subnet 2:
             - Subnet name: Privada-1
             - Availability Zone us-east-1a
-            - Subnet CIDR block: 10.0.1.x
+            - Subnet CIDR block: 10.0.1.0/24
             - Tags:
                 |KEY      |VALUE                |
                 |---------|---------------------|
@@ -60,7 +60,7 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
         - Subnet 3:
             - Subnet name: Pública-2
             - Availability Zone us-east-1b
-            - Subnet CIDR block: 10.0.2.x
+            - Subnet CIDR block: 10.0.2.0/24
             - Tags:
                 |KEY      |VALUE                |
                 |---------|---------------------|
@@ -68,7 +68,7 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
         - Subnet 4:
             - Subnet name: Privada-2
             - Availability Zone us-east-1b
-            - Subnet CIDR block: 10.0.3.x
+            - Subnet CIDR block: 10.0.3.0/24
             - Tags:
                 |KEY      |VALUE                |
                 |---------|---------------------|
@@ -124,6 +124,11 @@ A VPC se trata de uma rede virtual isolada dentro da infraestrutura da AWS, como
             - 0.0.0.0/0 - Sua NAT gateway
         - Subnet associations
             - Adicione as suas subnets privadas as suas explicit subnet associations
+         
+- Muito importante ativar as configurações de DNS na VPC settings antes de sair
+  - Edit VPC settings
+    - DNS settings: Enable para ambas
+    - Save
 
 <p align="center">
   <img src="imagens/VPC.PNG" alt="VPC" />
@@ -138,7 +143,7 @@ Os grupos de segurança são extremamente importantes para garantir que a nossa 
 
 |SERVIÇO         |MAPEAMENTO                |PORTA           |
 |----------------|--------------------------|----------------|
-|SSH             |10.0.0.x                  |22              |
+|SSH             |10.0.0.0/16               |22              |
 |HTTP            |SG-LoadBalancer           |80              |
 |Custom TCP      |SG-LoadBalancer           |8080            |
 |NFS             |SG-EFS                    |2049            |
@@ -161,7 +166,7 @@ Os grupos de segurança são extremamente importantes para garantir que a nossa 
 
 |SERVIÇO         |MAPEAMENTO                |PORTA           |
 |----------------|--------------------------|----------------|
-|MYSQL/AURORA    |SG-EC2                    |3306            |
+|MYSQL/AURORA    |10.0.0.0/16               |3306            |
 
 ### Inbound do Security Group Bastion Host
 
