@@ -185,7 +185,7 @@ O EFS criado possui a Availability Zone Regional, determinando que o sistema de 
 - Network
     - Manage
         - Adicionar a sua VPC
-        - Em Mount targets, selecionamos as availability zones disponíveis, portanto como criamos apenas a us-east-1a e us-east-1b, deixamos estas com as subnets públicas
+        - Em Mount targets, selecionamos as availability zones disponíveis, portanto como criamos apenas a us-east-1a e us-east-1b, deixamos estas com as subnets privadas
         - Deixamos as duas zonas selecionadas com as subnets privadas com o seu respectivo security group EFS
 
 ---
