@@ -2,7 +2,7 @@
 
 ## Apresentação
 
-### A proposta desse projeto é de subir instâncias EC2 privadas na AWS com um container utilizando a imagem do Wordpress. Para isso deve-se atender a algumas requisições, como conectar ao serviço RDS da Amazon, utilização do EFS para os arquivos estáticos, criação e configuração da VPC alocando as instâncias e os serviços nas redes privadas/públicas, criação de um Load Balancer para a conexão externa das instâncias privadas, e por último o Auto Scalling Group, com o objetivo de concluir esse sistema de forma segura e escalável.
+### O objetivo deste projeto é implementar instâncias EC2 privadas na AWS executando containers com a imagem do WordPress. Para isso, é necessário atender a alguns requisitos, como a conexão ao serviço RDS da Amazon, o uso do EFS para armazenar arquivos estáticos, além da criação e configuração da VPC, alocando as instâncias e serviços em redes privadas e públicas. Também será configurado um Load Balancer para gerenciar o tráfego externo às instâncias privadas e, por fim, será implementado um Auto Scaling Group para garantir que o sistema seja seguro, altamente disponível e escalável.
 
 <p align="center">
   <img src="imagens/proposta.PNG" alt="Proposta" />
